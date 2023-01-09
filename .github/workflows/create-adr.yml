@@ -33,9 +33,13 @@ jobs:
           ADR_NAME: "{{ inputs.adr-name }}"
           SUPERSEDING_ADR: "{{ inputs.supersedes }}"
         run: |
+          echo "ADR name: ${ADR_NAME}"
+          echo "Superseding ADR: ${SUPERSEDING_ADR}"
           if [ -n "$SUPERSEDING_ADR" ]; then
+            echo "Add new ADR with superseding"
             adr new -s "$SUPERSEDING_ADR" "$ADR_NAME"
           else
+            echo "Add new ADR without superseding"
             adr new "$ADR_NAME"
           fi
       
