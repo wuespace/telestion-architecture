@@ -30,8 +30,8 @@ jobs:
 
       - name: Add new ADR
         env:
-          ADR_NAME: "{{ inputs.adr-name }}"
-          SUPERSEDING_ADR: "{{ inputs.supersedes }}"
+          ADR_NAME: "${{ inputs.adr-name }}"
+          SUPERSEDING_ADR: "${{ inputs.supersedes }}"
         run: |
           echo "ADR name: ${ADR_NAME}"
           echo "Superseding ADR: ${SUPERSEDING_ADR}"
@@ -45,7 +45,7 @@ jobs:
       
       - name: Commit changes
         env:
-          ADR_NAME: "{{ inputs.adr-name }}"
+          ADR_NAME: "${{ inputs.adr-name }}"
         run: |
           git config --local user.name "${GITHUB_ACTOR}"
           git config --local user.email "${GITHUB_ACTOR}@users.noreply.github.com"
