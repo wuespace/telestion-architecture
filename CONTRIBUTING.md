@@ -62,7 +62,7 @@ Then, create a Pull Request to merge the `accept-ADR-<adr-number>` branch into t
 
 ### Accepted
 
-**If your change doesn't change the main content of the ADR,** you can make changes on a sparate branch and create a pull request to merge it into the `main` branch.
+**If your change doesn't change the main content of the ADR,** you can make changes on a separate branch and create a pull request to merge it into the `main` branch.
 
 **If your change also modifies the overall result / decision of the ADR,** you have to create a new ADR that either amends the previous one or supersedes it. In this case (due to linking issues), the ADR has to be accepted immediately, which is why you need to create it in a separate branch.
 
