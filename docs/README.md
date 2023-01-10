@@ -10,3 +10,7 @@ Below you can find links to all decision records:
 - [ADR-0002: Use custom ADR management tooling](./adrs/0002-use-custom-adr-management-tooling.md)
 - [ADR-0003: Use NATS as distributed message bus](./adrs/0003-use-nats-as-distributed-message-bus.md)
 <!-- INSERTION_MARK_DO_NO_DELETE -->
+
+## Contributing
+
+If you want to contribute to this project, please read the [contribution guidelines](../CONTRIBUTING.md).
