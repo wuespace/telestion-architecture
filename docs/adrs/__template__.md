@@ -7,7 +7,7 @@ Date: %%DATE%%
 Proposed
 
 ## Context
-<!-- The issue motivating this decision, and any context that influences or constrains the decision. -->
+<!-- The issue that is motivating this decision and any context that influences or constrains the decision. -->
 
 n/a
 
@@ -17,6 +17,6 @@ n/a
 n/a
 
 ## Consequences
-<!-- What becomes easier or more difficult to do and any risks introduced by the change that will need to be mitigated. -->
+<!-- What becomes easier, or more difficult to do and any risks introduced by the change that will need to be mitigated? -->
 
 n/a
