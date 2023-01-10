@@ -6,7 +6,7 @@ Date: 2023-01-09
 
 Accepted
 
-Amended [ADR-0002: Use custom ADR management tooling](0002-use-custom-adr-management-tooling.md)
+Amended by [ADR-0002: Use custom ADR management tooling](0002-use-custom-adr-management-tooling.md)
 
 ## Context
 
