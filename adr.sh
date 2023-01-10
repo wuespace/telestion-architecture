@@ -44,6 +44,8 @@ Usage: ${script_name} <command> [options]
 
 Commands:
     new       creates a new ADR
+    accept    accepts an existing ADR
+    link      creates a link between two ADRs
 
 Options:
     --help, -h      shows this help
@@ -53,11 +55,40 @@ Run '${script_name} <command> --help' to show command specific help.
 "
 
 help_new="
+Creates a new ADR with the specified title.
+This ADR can optionally supersede an existing ADR by specifing the ADR number.
+
 Usage: ${script_name} new [options] <title...>
 
 Options:
-    --supersedes, -s <adr-version>   Specifies the ADR number that gets superseded by the new ADR.
+    --supersedes, -s <adr-number>    Specifies the ADR number that gets superseded by the new ADR.
                                      Additionally, a link to the new ADR gets added.
+    --help, -h                       shows this help
+    --version, -V                    shows the current version of the tool
+
+Run '${script_name} --help' to show the general help.
+"
+
+help_accept="
+Accepts an existing ADR.
+
+Usage: ${script_name} accept [options] <adr-number>
+
+Options:
+    --help, -h      shows this help
+    --version, -V   shows the current version of the tool
+
+Run '${script_name} --help' to show the general help.
+"
+
+help_link="
+Creates a link between two ADRs.
+Each link contains a prefix and a target link to the other ADR.
+In the following schema:
+    - ADR1 <adr1-prefix> ADR2 (e.g. ADR1 Amends ADR2)
+    - ADR2 <adr2-prefix> ADR1 (e.g. ADR2 Amended by ADR1)
+
+Usage: ${script_name} link [options] <adr1-number> <adr1-prefix> <adr2-number> <adr2-prefix>
 
 Options:
     --help, -h      shows this help
@@ -76,6 +107,14 @@ print_help_general() {
 
 print_help_new() {
     printf '%s\n' "$help_new"
+}
+
+print_help_accept() {
+    printf '%s\n' "$help_accept"
+}
+
+print_help_link() {
+    printf '%s\n' "$help_link"
 }
 
 print_version() {
@@ -101,44 +140,6 @@ get_adr_title() {
     adr_path="$1"
 
     head -1 "$adr_path" | cut -c 3-
-}
-
-supersede_adr() {
-    adr_path="$1"
-    replacement_adr_name="$2"
-    replacement_adr_title="$(get_adr_title "${adrs_dir}/${replacement_adr_name}")"
-
-    awk -v link_path="$replacement_adr_name" -v link_title="$replacement_adr_title" '
-        BEGIN {
-            in_status_section=0
-            print_superseded=0
-        }
-
-        /^##/ {
-            in_status_section=0
-        }
-
-        /^## Status$/ {
-            in_status_section=1
-            print_superseded=1
-        }
-
-        {
-            if (in_status_section) {
-                if (print_superseded) {
-                    print "## Status"
-                    print ""
-                    print "Superseded by [" link_title "](" link_path ")"
-                    print ""
-                    print_superseded=0
-                }
-            } else {
-                print
-            }
-        }
-    ' "${adr_path}" > "${adr_path}.tmp"
-
-    mv --force "${adr_path}.tmp" "${adr_path}"
 }
 
 change_state() {
@@ -276,6 +277,75 @@ command_new() {
     exit 0
 }
 
+command_accept() {
+    if [ "$#" -lt 1 ]; then
+        print_help_accept
+        exit 1
+    fi
+
+    while [ "$#" -gt 0 ]; do
+        case "$1" in
+            --help|-h) print_help_accept; exit 0;;
+            --version|-V) print_version; exit 0;;
+            *) break 2;;
+        esac
+
+        shift
+    done
+
+    if [ "$#" -lt 1 ]; then
+        printf 'ADR number required.\n'
+        exit 1
+    fi
+
+    adr_number="$1"
+    adr_path="$(get_adr_path "$adr_number")"
+    adr_title="$(get_adr_title "$adr_path")"
+
+    change_state "$adr_path" "Accepted"
+    
+    printf 'Accepted %s\n' "$adr_title"
+    exit 0
+}
+
+command_link() {
+    if [ "$#" -lt 1 ]; then
+        print_help_link
+        exit 1
+    fi
+
+    while [ "$#" -gt 0 ]; do
+        case "$1" in
+            --help|-h) print_help_link; exit 0;;
+            --version|-V) print_version; exit 0;;
+            *) break 2;;
+        esac
+
+        shift
+    done
+
+    if [ "$#" -lt 4 ]; then
+        printf 'The following arguments are required: <adr1-number> <adr1-prefix> <adr2-number> <adr2-prefix>.\n'
+        exit 1
+    fi
+
+    adr1_number="$1"
+    adr1_path="$(get_adr_path "$adr1_number")"
+    adr1_title="$(get_adr_title "$adr1_path")"
+    adr1_prefix="$2"
+    adr2_number="$3"
+    adr2_path="$(get_adr_path "$adr2_number")"
+    adr2_title="$(get_adr_title "$adr2_path")"
+    adr2_prefix="$4"
+
+    add_link "$adr1_path" "$adr1_prefix" "$(basename "$adr2_path")"
+    add_link "$adr2_path" "$adr2_prefix" "$(basename "$adr1_path")"
+
+    printf '%s %s %s\n' "$adr1_title" "$adr1_prefix" "$adr2_title"
+    printf '%s %s %s\n' "$adr2_title" "$adr2_prefix" "$adr1_title"
+    exit 0
+}
+
 ##
 ## main
 ##
@@ -292,5 +362,7 @@ case "$command" in
     --help|-h) print_help_general; exit 0;;
     --version|-V) print_version; exit 0;;
     new) command_new "$@";;
+    accept) command_accept "$@";;
+    link) command_link "$@";;
     *) print_unknown "$command"; exit 1;;
 esac
