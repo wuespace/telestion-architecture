@@ -144,7 +144,7 @@ change_state() {
     adr_path="$1"
     state="$2"
 
-    awk -v state="$state" '
+    sed 's/\r$//' "$adr_path" | awk -v state="$state" '
         BEGIN {
             in_status_section=0
         }
@@ -162,7 +162,7 @@ change_state() {
         }
 
         { print }
-    ' "$adr_path" > "$adr_path.tmp"
+    ' > "$adr_path.tmp"
     mv --force "$adr_path.tmp" "$adr_path"
 }
 
@@ -172,7 +172,7 @@ add_link() {
     linked_adr_name="$3"
     linked_adr_title="$(get_adr_title "${adrs_dir}/${linked_adr_name}")"
 
-    awk -v prefix_text="$prefix_text" -v link_path="$linked_adr_name" -v link_title="$linked_adr_title" '
+    sed 's/\r$//' "${adr_path}" | awk -v prefix_text="$prefix_text" -v link_path="$linked_adr_name" -v link_title="$linked_adr_title" '
         BEGIN {
             in_status_section=0
         }
@@ -190,7 +190,7 @@ add_link() {
         }
 
         { print }
-    ' "${adr_path}" > "${adr_path}.tmp"
+    ' > "${adr_path}.tmp"
 
     mv --force "${adr_path}.tmp" "${adr_path}"
 }
@@ -237,7 +237,7 @@ command_new() {
             sed -e 's/[^[:alnum:]]*$//' -e 's/^[^[:alnum:]]*//' |\
             tr -cs '[:alnum:]' - |\
             tr '[:upper:]' '[:lower:]')"
-    
+
     file_name="${nullifed_new_rev}-${slug}.md"
     file_path="${adrs_dir}/${file_name}"
     date="$(date +%Y-%m-%d)"
@@ -261,14 +261,14 @@ command_new() {
     fi
 
     # add new ADR to README
-    awk -v nullified_rev="$nullifed_new_rev" -v adr_title="$title" -v file_name="$file_name" '
+    sed 's/\r$//' "$readme_path" | awk -v nullified_rev="$nullifed_new_rev" -v adr_title="$title" -v file_name="$file_name" '
         /^<!-- INSERTION_MARK_DO_NO_DELETE -->$/ {
             print "- [ADR-" nullified_rev ": " adr_title "](./adrs/" file_name ")"
             print "<!-- INSERTION_MARK_DO_NO_DELETE -->"
             next
         }
         { print }
-    ' "$readme_path" > "$readme_path.tmp"
+    ' > "$readme_path.tmp"
     mv --force "$readme_path.tmp" "$readme_path"
 
     printf 'Created %s\n' "$(get_adr_title "$file_path")"
@@ -301,7 +301,7 @@ command_accept() {
     adr_title="$(get_adr_title "$adr_path")"
 
     change_state "$adr_path" "Accepted"
-    
+
     printf 'Accepted %s\n' "$adr_title"
     exit 0
 }
