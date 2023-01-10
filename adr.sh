@@ -1,7 +1,5 @@
 #!/bin/sh
 
-set +x
-
 # Author: WüSpace e. V. 2023 (c)
 
 # Based on: https://github.com/npryce/adr-tools
