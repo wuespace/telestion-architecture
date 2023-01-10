@@ -11,15 +11,15 @@ Proposed
 
 For Telestion to be truly extensible and modular, various aspects of the application might have to be written in different programming languages (e.g., scientists might prefer to write specific parts of the application in Python).
 
-A vendor lock in (for example into *Vert.x*) is therefore not advised. There are several solutions for message buses that are not vendors or library-specific. They include:
+A vendor lock in (for example into *Vert.x*) is therefore not advised. There are several solutions for message buses that are not vendors or library-specific. They include (apart from many others that were not deeply looked into for several reasons):
 
 - RabbitMQ [^RabbitMQ]
 - Apache Kafka [^Kafka]
 - NATS [^NATS]
 
-[^RabbitMQ]: https://www.rabbitmq.com/
-[^Kafka]: https://kafka.apache.org/
-[^NATS]: https://nats.io/
+[^RabbitMQ]: [RabbitMQ homepage](https://www.rabbitmq.com/)
+[^Kafka]: [Apache Kafka homepage](https://kafka.apache.org/)
+[^NATS]: [NATS homepage](https://nats.io/)
 
 Each of the solutions have several advantages and disadvantages. The most important factors for the project are as follows:
 
@@ -33,7 +33,7 @@ From the various considered options, NATS seems to fit our requirements the best
 
 Of special note is also the [*queue groups*](https://docs.nats.io/nats-concepts/core-nats/queue) feature demonstrated in the following video (beginning at 5:20):
 
-https://youtu.be/hjXIUPZ7ArM?t=325
+[NATS demo video](https://youtu.be/hjXIUPZ7ArM?t=325)
 
 It also offers an extensive [authentication/authorization feature](https://docs.nats.io/running-a-nats-service/configuration/securing_nats/auth_intro), [*subject hierarchies*](https://docs.nats.io/nats-concepts/subjects), and more.
 
