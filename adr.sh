@@ -53,7 +53,7 @@ Run '${script_name} <command> --help' to show command specific help.
 "
 
 help_new="
-Usage: ${script_name} new [options] <title>
+Usage: ${script_name} new [options] <title...>
 
 Options:
     --supersedes, -s <adr-version>   Specifies the ADR number that gets superseded by the new ADR.
@@ -126,6 +126,7 @@ supersede_adr() {
         {
             if (in_status_section) {
                 if (print_superseded) {
+                    print "## Status"
                     print ""
                     print "Superseded by [" link_title "](" link_path ")"
                     print ""
@@ -138,6 +139,32 @@ supersede_adr() {
     ' "${adr_path}" > "${adr_path}.tmp"
 
     mv --force "${adr_path}.tmp" "${adr_path}"
+}
+
+change_state() {
+    adr_path="$1"
+    state="$2"
+
+    awk -v state="$state" '
+        BEGIN {
+            in_status_section=0
+        }
+
+        /^\S+/ {
+            if (in_status_section) {
+                print state
+                in_status_section=0
+                next
+            }
+        }
+
+        /^## Status$/ {
+            in_status_section=1
+        }
+
+        { print }
+    ' "$adr_path" > "$adr_path.tmp"
+    mv --force "$adr_path.tmp" "$adr_path"
 }
 
 add_link() {
@@ -191,7 +218,7 @@ command_new() {
 
                 supersedes="$1"
                 ;;
-            *) print_unknown "$1"; exit 1;;
+            *) break 2;;
         esac
 
         shift
@@ -217,7 +244,7 @@ command_new() {
     date="$(date +%Y-%m-%d)"
 
     # generate ADR from template
-    sed -e "s/%%NUMBER%%/${new_rev}/" \
+    sed -e "s/%%NUMBER%%/${nullifed_new_rev}/" \
         -e "s/%%TITLE%%/${title}/" \
         -e "s/%%DATE%%/${date}/" \
         "$template_path" > "$file_path"
@@ -225,14 +252,27 @@ command_new() {
     # add superseded message
     if [ -n "$supersedes" ]; then
         superseded_adr_path="$(get_adr_path "$supersedes")"
-        supersede_adr "$superseded_adr_path" "$file_name"
-        add_link "$file_path" "Supersedes" "$(basename "$superseded_adr_path")"
+        superseded_adr_file_name="$(basename "$superseded_adr_path")"
+        superseded_adr_title="$(get_adr_title "$superseded_adr_path")"
+
+        change_state "$superseded_adr_path" "Deprecated"
+        add_link "$superseded_adr_path" "Superseded by" "$file_name"
+        add_link "$file_path" "Supersedes" "$superseded_adr_file_name"
+        printf 'Supersedes %s\n' "$superseded_adr_title"
     fi
 
     # add new ADR to README
-    sed -i "s/\<\!-- INSERTION_MARK_DO_NO_DELETE --\>/- \[ADR-${nullifed_new_rev}: Record architecture decisions\]\(\.\/adrs\/${file_name}\)\<\!-- INSERTION_MARK_DO_NO_DELETE --\>/" "$readme_path"
+    awk -v nullified_rev="$nullifed_new_rev" -v adr_title="$title" -v file_name="$file_name" '
+        /^<!-- INSERTION_MARK_DO_NO_DELETE -->$/ {
+            print "- [ADR-" nullified_rev ": " adr_title "](./adrs/" file_name ")"
+            print "<!-- INSERTION_MARK_DO_NO_DELETE -->"
+            next
+        }
+        { print }
+    ' "$readme_path" > "$readme_path.tmp"
+    mv --force "$readme_path.tmp" "$readme_path"
 
-    printf 'Finished'
+    printf 'Created %s\n' "$(get_adr_title "$file_path")"
     exit 0
 }
 

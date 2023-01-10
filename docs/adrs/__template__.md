@@ -1,4 +1,4 @@
-# %%NUMBER%%: %%TITLE%%
+# ADR-%%NUMBER%%: %%TITLE%%
 
 Date: %%DATE%%
 
