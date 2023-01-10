@@ -74,7 +74,7 @@ To do so, create a new branch titled `amend-ADR-<adr-number>`, and run:
 
 ```bash
 $ ./adr.sh new "My ADR"
-$ ./adr.sh link <new-adr-number> Amends <previous-adr-number> Amended by
+$ ./adr.sh link <new-adr-number> "Amends" <previous-adr-number> "Amended by"
 $ ./adr.sh accept <new-adr-number>
 ```
 
@@ -82,7 +82,7 @@ or, if you're on Windows:
 
 ```powershell
 PS C:\path\to\project> .\adr.cmd new "My ADR"
-PS C:\path\to\project> .\adr.cmd link <new-adr-number> Amends <previous-adr-number> Amended by
+PS C:\path\to\project> .\adr.cmd link <new-adr-number> "Amends" <previous-adr-number> "Amended by"
 PS C:\path\to\project> .\adr.cmd accept <new-adr-number>
 ```
 
