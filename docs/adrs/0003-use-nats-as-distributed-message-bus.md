@@ -31,7 +31,7 @@ Each of the solutions have several advantages and disadvantages. The most import
 
 From the various considered options, NATS seems to fit our requirements the best.
 
-Of special note is also the [*queue groups*](https://docs.nats.io/nats-concepts/core-nats/queue) feature demonstrated in the following video (beginning at 5:20):
+Of special note is also the [*queue groups*](https://docs.nats.io/nats-concepts/core-nats/queue) feature that has the potential to make clustering/scaling (even in a broadcast pattern) easy, as demonstrated in the following video (beginning at 5:25):
 
 [NATS demo video](https://youtu.be/hjXIUPZ7ArM?t=325)
 
