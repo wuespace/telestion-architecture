@@ -6,6 +6,8 @@ Date: 2023-01-09
 
 Accepted
 
+Amended [ADR-0002: Use custom ADR management tooling](0002-use-custom-adr-management-tooling.md)
+
 ## Context
 
 We need to record the architectural decisions made on this project.

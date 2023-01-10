@@ -7,4 +7,5 @@ Below you can find links to all decision records:
 ## ADRs
 
 - [ADR-0001: Record architecture decisions](./adrs/0001-record-architecture-decisions.md)
+- [ADR-0002: Use custom ADR management tooling](./adrs/0002-use-custom-adr-management-tooling.md)
 <!-- INSERTION_MARK_DO_NO_DELETE -->
