@@ -6,8 +6,7 @@ Date: 2023-01-10
 
 Accepted
 
-Amends [ADR-0001: Record architecture decisions
-](0001-record-architecture-decisions.md)
+Amends [ADR-0001: Record architecture decisions](0001-record-architecture-decisions.md)
 
 ## Context
 <!-- The issue motivating this decision, and any context that influences or constrains the decision. -->
