@@ -9,6 +9,7 @@ Below you can find links to all decision records:
 - [ADR-0001: Record architecture decisions](./adrs/0001-record-architecture-decisions.md)
 - [ADR-0002: Use custom ADR management tooling](./adrs/0002-use-custom-adr-management-tooling.md)
 - [ADR-0003: Use NATS as distributed message bus](./adrs/0003-use-nats-as-distributed-message-bus.md)
+- [ADR-0004: Revised Vert.x-independent terminology](./adrs/0004-revised-vert-x-independent-terminology.md)
 <!-- INSERTION_MARK_DO_NO_DELETE -->
 
 ## Contributing
