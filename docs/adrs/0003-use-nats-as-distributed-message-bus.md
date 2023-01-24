@@ -6,6 +6,10 @@ Date: 2023-01-10
 
 Accepted
 
+Related to [ADR-0005: Use standard NATS clients if available](0005-use-standard-nats-clients-if-available.md)
+
+Amended by [ADR-0006: NATS message format](0006-nats-message-format.md)
+
 ## Context
 <!-- The issue that motivates this decision and any context that influences or constrains the decision. -->
 
@@ -60,3 +64,6 @@ We will have to deploy and maintain a NATS cluster for the project.
 We will have to implement a NATS client for the Telestion Client. This will be based on NATS SDKs but feature an easier API for the Telestion Client.
 
 We will have to implement a NATS client for the Telestion Application. This will be based on NATS SDKs but feature an easier API for the Telestion Application.
+
+
+
