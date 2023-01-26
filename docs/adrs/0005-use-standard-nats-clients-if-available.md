@@ -4,7 +4,7 @@ Date: 2023-01-24
 
 ## Status
 
-Proposed
+Accepted
 
 Related to [ADR-0003: Use NATS as distributed message bus](0003-use-nats-as-distributed-message-bus.md)
 
