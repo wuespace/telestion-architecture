@@ -4,7 +4,7 @@ Date: 2023-01-24
 
 ## Status
 
-Proposed
+Accepted
 
 Amends [ADR-0003: Use NATS as distributed message bus](0003-use-nats-as-distributed-message-bus.md)
 
@@ -40,31 +40,34 @@ We will allow the usage of **headers only as additional metadata** (for example,
 
 - we will have no overhead and great support of binary message formats.
 
-- we will potentially have some overhead due to using ASCII instead of UTF-8. This should, however, be minimal, since it only affects the "Extended ASCII codes" ($\geq 128$), the usage of which is not expected to outweigh the usage of characters $\geq 256$, which would cause significant overhead with ASCII-based formatting (requiring constructs like `\u00df`, i.e., at least 6 Bytes of character data). Thus, we don't expect any actual overhead by using UTF-8 over ASCII.
+- we will potentially have some overhead due to using UTF-8 instead of ASCII. This should, however, be minimal, since it only affects the "Extended ASCII codes" ($\geq 128$), the usage of which is not expected to outweigh the usage of characters $\geq 256$, which would cause significant overhead with ASCII-based formatting (requiring constructs like `\u00df`, i.e., at least 6 Bytes of character data). Thus, we don't expect any actual overhead by using UTF-8 over ASCII.
 
 - we will have to differentiate well between structured and binary messages.
 
-- by not considering headers to be an integral part of a message, we can simply "plug" another service between two other services in their communication as a kind of middleware without having to care about forwarding any headers:
-  If `Service 2` can handle this,
-
-  ```mermaid
-  flowchart LR
+- by not considering headers to be an integral part of a message, we can simply "plug" another service between two other services in their communication as a kind of middleware without having to care about forwarding any headers (cf. *Headers Example*)
   
-  s1[Service 1]
-  s2[Service 2]
-  s1 -- "data + headers" --> s2
-  ```
 
-  is can also handle this (and thus requires no knowledge of the data's origin):
+### Headers example
 
-  ```mermaid
-  flowchart LR
-  
-  s1[Service 1]
-  m[Middleware Service]
-  s2[Service 2]
-  s1 -- "data + headers" --> m
-  m -- "preprocessed data" --> s2
-  ```
+If `Service 2` can handle this,
 
-  
+```mermaid
+flowchart LR
+
+s1[Service 1]
+s2[Service 2]
+s1 -- "data + headers" --> s2
+```
+
+is can also handle this (and thus requires no knowledge of the data's origin):
+
+```mermaid
+flowchart LR
+
+s1[Service 1]
+m[Middleware Service]
+s2[Service 2]
+s1 -- "data + headers" --> m
+m -- "preprocessed data" --> s2
+```
+
