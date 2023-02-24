@@ -4,64 +4,32 @@ Date: 2023-01-18
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
+
 <!-- The issue that is motivating this decision and any context that influences or constrains the decision. -->
 
-Previously,  the terminology of the project was based on Vert.x' EventBus. This was a good starting point, but it is not a good fit for the project anymore.
+The original terminology of the Telestion project was based on Vert.x' EventBus, which was a good starting point but has become less relevant as the project has evolved. With the decision to use NATS as the distributed message bus for the project (as documented in [ADR-0003](https://chat.openai.com/0003-use-nats-as-distributed-message-bus.md)), it became clear that the terminology needed to be revised to be more independent of specific technologies.
 
-With [ADR-0003](./0003-use-nats-as-distributed-message-bus.md), we decided to use NATS as the distributed message bus for the project. Therefore, while some aspects of Telestion can continue to use Vert.x, the terminology should be revised to be independent of Vert.x.
+One particular issue with the old terminology was the ambiguity in the client/server terminology. A Verticle could be both a client to other Verticles and a server for other Verticles, which was confusing and made it harder to understand the system architecture. With NATS, the only "server" is the NATS server itself, while the NATS client libraries are only clients to the NATS server (even when used on a server-side microservice).
 
-We have always had an ambiguity in the client/server terminology. A Verticle could both be a client to other Verticles and a server for other Verticles. This problem now only got more complicated since with NATS, the only real "server" is the NATS server itself. The NATS client libraries are only clients to the NATS server (even when used on a server-side microservice).
+Moreover, as Telestion has evolved, it has become clear that microservices can be implemented in other languages and frameworks besides Java/Vert.x. Therefore, the term "Verticle" is no longer appropriate to describe a microservice and should be considered an implementation detail instead.
 
-Given that microservices can be implemented in other languages and/or frameworks than Java/Vert.x, the term Verticle also can no longer be used to describe a microservice. Instead, it is now an implementation detail of the microservice.
+To address these issues, we need to revise the terminology of the project to be more consistent, clear, and independent of specific technologies. This will help to ensure that the terminology accurately reflects the system architecture and is easier to understand for all stakeholders, including developers, users, and managers.
 
 ## Decision
 <!-- The change that we're proposing or have agreed to implement. -->
 
-We will call the NATS server the *message broker* or *message bus* or *NATS server*.
+We will modify the terminology used to refer to different components in the system based on the feedback received:
 
-We will call any microservice-like components that have no immediate user interface a *service* or *microservice*. We will call the collection of all services the *backend*.
+1. We will refer to the NATS server as the *message broker*, *message bus*, or *NATS server* interchangeably.
+2. We will call any component that acts as a service, including those with or without an attached user interface, a *service*. The collection of all services that do not have an immediate user interface will be referred to as the *backend* or *backend services*.
+3. We will call any component that provides a user interface, which were formerly called "clients," a *frontend*. In most cases, the frontend will authenticate to the message broker as the user using it, while any backend service acts on behalf of itself.
 
-We will call any components that are/provide a user interface (by themselves instead of through another component) a *frontend*.
+These changes aim to provide a more precise and consistent naming convention that takes into account the fact that some components may have both service and frontend functionalities. It also addresses the concern that calling the frontend a "client" could be misleading.
 
-The backend and the frontend are both parts of the *application*. The application includes all components that are deployed for a mission.
-
-For example, an application might consist of the following components:
-
-```mermaid
-flowchart BT
-
-nats["Message Broker\n[NATS]"]
-
-subgraph Backend
-subgraph pm2["PM2 Managed Processes"]
-s1["Service 1\n[NodeJS]"]
-s2["Service 2\n[NodeJS]"]
-
-s1 -- "requests data from [NATS / TCP]" --> s2
-end
-
-s1 -- communicates via --> nats
-s2 -- communicates via --> nats
-
-p1["Python Service 1\n[Python]"]
-p1 -- communicates via --> nats
-
-s2 -- "requests data from [NATS/TCP]" --> p1
-end
-subgraph Operator PC
-c1["Frontend\n[ReactJS]"]
-end
-
-c1 -- communicates via --> nats
-c1 -- "requests data from [NATS / WebSocket]" --> s1
-```
-
-Because the message broker is always used (and, except for rare occurrences, at least conceptually[^ConceptualMessageBrokerSingleton] only a single message broker exists), we can omit it in our diagram to avoid visual clutter:
-
-[^ConceptualMessageBrokerSingleton]: While there can be multiple message brokers through clustering, they are conceptually a single message broker. This is because the message broker is a singleton in the sense that there is only one message broker per application. The message broker is not a singleton in the sense that there is only one message broker per machine. This is because the message broker is a distributed system and can be scaled horizontally.
+For example, an application could include components like the ones depicted below. The components communicate with each other via the NATS message broker.
 
 ```mermaid
 flowchart LR
@@ -69,20 +37,18 @@ subgraph Backend
 subgraph pm2["PM2 Managed Processes"]
 s1["Service 1\n[NodeJS]"]
 s2["Service 2\n[NodeJS]"]
-
 s1 -- "requests data from\n[NATS / TCP]" --> s2
 end
-
 p1["Python Service 1\n[Python]"]
-
 s2 -- "requests data from\n[NATS/TCP]" --> p1
 end
 subgraph Operator PC
-c1["Frontend\n[ReactJS]"]
+c1["Frontend\nService\n[ReactJS]"]
 end
-
 c1 -- "requests data from\n[NATS / WebSocket]" --> s1
 ```
+
+> Since the message broker is always used and there is at least conceptually only a single message broker, we can exclude it from the diagram to improve its readability. Note that although the message broker can be clustered to achieve higher availability, this is conceptually treated as a single message broker instance, as it is still a singleton per application, but not necessarily per machine.
 
 ## Consequences
 <!-- What becomes easier, or more difficult to do and any risks introduced by the change that will need to be mitigated? -->
@@ -101,5 +67,4 @@ After accepting this ADR, we should update the documentation and the code to use
 ## References
 
 - [ADR-0003](./0003-use-nats-as-distributed-message-bus.md)
-
 
