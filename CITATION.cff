@@ -1,0 +1,28 @@
+# This CITATION.cff file was generated with cffinit.
+# Visit https://bit.ly/cffinit to generate yours today!
+
+cff-version: 1.2.0
+title: Telestion Architectural Decision Records
+message: >-
+  If you use this software, please cite it using the
+  metadata from this file.
+type: software
+authors:
+  - name: WüSpace e. V.
+    address: Emil-Fischer-Straße 32
+    city: Würzburg
+    post-code: '97074'
+    country: DE
+    website: 'https://www.wuespace.de'
+identifiers:
+  - type: url
+    value: 'https://github.com/wuespace/telestion-architecture'
+    description: GitHub Repository
+  - type: url
+    value: 'https://wuespace.github.io/telestion-architecture/'
+    description: Web Publication
+repository-code: 'https://github.com/wuespace/telestion-architecture'
+url: 'https://github.com/wuespace/telestion-architecture'
+abstract: >-
+  Documentation of Architectural Decisions surrounding the
+  Telestion project
