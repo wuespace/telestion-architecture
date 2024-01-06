@@ -4,7 +4,7 @@ Date: 2024-01-06
 
 ## Status
 
-Proposed
+Accepted
 
 ## Context
 <!-- The issue that is motivating this decision and any context that influences or constrains the decision. -->
