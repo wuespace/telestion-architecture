@@ -43,7 +43,7 @@ Dashboard configurations will be stored on the user's device. This will allow th
 ## Consequences
 <!-- What becomes easier, or more difficult to do and any risks introduced by the change that will need to be mitigated? -->
 
-Upon accepatance of this decision, the following consequences will take effect:
+Upon acceptance of this decision, the following consequences will take effect:
 
 ### Deprecation of the previous framework / architecture
 
@@ -55,6 +55,6 @@ While guidance on migration can be provided, it is not guaranteed that the migra
 
 The new framework will be easier to understand and use.
 
-### Better Maintanability
+### Better Maintainability
 
 The new framework will be easier to maintain and extend.
