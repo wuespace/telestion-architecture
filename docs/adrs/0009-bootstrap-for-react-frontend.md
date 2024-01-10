@@ -22,7 +22,7 @@ With the additional feature of [CSS nesting](https://developer.mozilla.org/en-US
 
 Additionally, scoping can be achieved using CSS/SCSS modules in React, which is supported by most bundlers.
 
-Compared to various vendor-specific CSS-in-JS solutions, the best-known solution to styling is (and remains) CSS. Its is therefore reasonable to hypothosize that a CSS-based approach to styling will be easier to understand and maintain than a CSS-in-JS approach.
+Compared to various vendor-specific CSS-in-JS solutions, the best-known solution to styling is (and remains) CSS. Its is therefore reasonable to hypothesize that a CSS-based approach to styling will be easier to understand and maintain than a CSS-in-JS approach.
 
 React Spectrum uses a custom CSS-in-JS solution that does not play well with custom CSS. In fact, their documentation states that:
 
